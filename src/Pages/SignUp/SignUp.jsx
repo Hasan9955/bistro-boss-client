@@ -5,14 +5,14 @@ import loginGif from '../../assets/others/authentication2.png'
 import { AuthContext } from '../../Providers/AuthProvider';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
-import Swal from 'sweetalert2';  
-import { AxiosBase } from '../../Hooks/useAxiosSecure';
+import Swal from 'sweetalert2';
+import useAxiosPublic from '../../Hooks/useAxiosPublic';
 
 
 
-const SignUp = () => { 
+const SignUp = () => {
 
-
+    const axiosPublic = useAxiosPublic();
     const { googleSign, createUser, updateUser, logOut } = useContext(AuthContext)
     const navigate = useNavigate();
 
@@ -34,7 +34,7 @@ const SignUp = () => {
                             name: data.name,
                             email: data.email
                         }
-                        AxiosBase.post('/users', userInfo)
+                        axiosPublic.post('/users', userInfo)
                             .then(res => {
                                 console.log(res.data)
                                 if (res.data.insertedId) {
@@ -74,20 +74,19 @@ const SignUp = () => {
 
 
 
-    /* const handleLogin = (e) => {
-        e.preventDefault()
-        const form = e.target
-        const email = form.email.value
-        const password = form.password.value
-        
-        
-         
-    } */
-
     const handleGoogle = () => {
         googleSign()
             .then(result => {
                 console.log(result)
+                const userInfo = {
+                    name: result.user?.displayName,
+                    email: result.user?.email
+                }
+                axiosPublic.post('/users', userInfo)
+                    .then(res => {
+                        console.log(res.data)
+                        navigate('/')
+                    })
             })
             .catch(error => {
                 console.error(error)

@@ -3,12 +3,13 @@ import SectionTitle from "../../Components/SectionTitle";
 import useMenu from "../../Hooks/UseMenu";
 import useAuth from "../../Hooks/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AxiosBase } from "../../Hooks/useAxiosSecure";
 import useCart from "../../Hooks/useCart";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 
 const Recommend = () => {
 
+  const AxiosBase = useAxiosSecure();
   const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();

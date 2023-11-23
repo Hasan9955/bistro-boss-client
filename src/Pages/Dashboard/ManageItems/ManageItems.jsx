@@ -1,14 +1,17 @@
-import useCart from "../../../Hooks/useCart";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
+import SectionTitle from "../../../Components/SectionTitle";
+import useMenu from "../../../Hooks/UseMenu";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 
-const Cart = () => {
-    const [cart, refetch] = useCart();
+const ManageItems = () => {
 
     const AxiosBase = useAxiosSecure();
-    const totalPrice = cart.reduce((total, item) => total + item.price, 0)
+    const [menu, , refetch] = useMenu();
+
 
     const handleDelete = id => {
         Swal.fire({
@@ -21,10 +24,11 @@ const Cart = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                AxiosBase.delete(`/carts/${id}`)
+                AxiosBase.delete(`/menu/${id}`)
                     .then(res => {
                         console.log(res.data)
                         if (res.data.acknowledged) {
+                            refetch();
                             Swal.fire({
                                 position: "center",
                                 icon: "success",
@@ -32,37 +36,40 @@ const Cart = () => {
                                 showConfirmButton: false,
                                 timer: 1500
                               });
-                            refetch();
                         }
                     })
             }
         });
     }
+
+
     return (
-        <>
-            <div className="flex justify-evenly items-center">
-                <h2 className="text-2xl">Items: {cart.length}</h2>
-                <h2 className="text-2xl">Total Price: ${totalPrice}</h2>
-                <button className="btn btn-primary ">Process to checkout</button>
-            </div>
-            <div className="overflow-x-auto mt-10">
+        <div>
+            <SectionTitle
+            heading={'MANAGE ALL ITEMS'}
+            subHeading={'---Hurry Up!---'}
+            ></SectionTitle>
+
+<> 
+            <div className="overflow-x-auto mt-10 rounded-t-lg">
                 <table className="table w-full">
                     {/* head */}
                     <thead>
-                        <tr>
+                        <tr className="bg-[#D1A054] text-white h-16">
                             <th>
                                 #
                             </th>
-                            <th>Image</th>
-                            <th>Name</th>
+                            <th>ITEM IMAGE</th>
+                            <th>ITEM NAME</th>
                             <th>Price</th>
+                            <th>Action</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
 
-                            cart.map((item, index) => <tr key={item._id}>
+                            menu?.map((item, index) => <tr key={item._id}>
                                 <th>
                                     {index + 1}
                                 </th>
@@ -74,9 +81,16 @@ const Cart = () => {
                                     </div>
                                 </td>
                                 <td>
-                                    <p className="text-xl font-semibold">{item.menuName}</p>
+                                    <p className="text-xl font-semibold">{item.name}</p>
                                 </td>
                                 <td className="text-lg font-bold">${item.price}</td>
+                                <th>
+                                    <Link to={`/dashboard/updateItem/${item._id}`}>
+                                    <button className="btn btn-ghost p-2 bg-[#D1A054] text-white">
+                                        <MdOutlineDriveFileRenameOutline className="text-xl "></MdOutlineDriveFileRenameOutline>
+                                    </button>
+                                    </Link>
+                                </th>
                                 <th>
                                     <button onClick={() => handleDelete(item._id)} className="btn btn-ghost p-2 bg-red-600 text-white">
                                         <RiDeleteBin6Line className="text-xl "></RiDeleteBin6Line>
@@ -89,9 +103,8 @@ const Cart = () => {
                 </table>
             </div>
         </>
-
-
+        </div>
     );
 };
 
-export default Cart;
+export default ManageItems;

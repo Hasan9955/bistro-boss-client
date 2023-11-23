@@ -6,13 +6,13 @@ import { AuthContext } from '../../Providers/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
+import useAxiosPublic from '../../Hooks/useAxiosPublic';
 
 
 const Login = () => {
 
     const { signIn, googleSign } = useContext(AuthContext)
-    const location = useLocation();
-    console.log(location)
+    const location = useLocation(); 
 
     const captchaRef = useRef();
     const [disable, setDisable] = useState(true)
@@ -21,6 +21,8 @@ const Login = () => {
     useEffect(() => {
         loadCaptchaEnginge(6);
     }, [])
+
+    const axiosPublic = useAxiosPublic();
 
 
     const handleLogin = (e) => {
@@ -40,7 +42,7 @@ const Login = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
-                navigate( location.state ? location.state : '/')
+                navigate(location.state ? location.state : '/')
             })
             .catch(error => {
                 console.error(error)
@@ -56,15 +58,22 @@ const Login = () => {
     const handleGoogle = () => {
         googleSign()
             .then(result => {
-                console.log(result)
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "Login successful",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-
+                const userInfo = {
+                    name: result.user?.displayName,
+                    email: result.user?.email
+                }
+                axiosPublic.post('/users', userInfo)
+                    .then(res => {
+                        console.log(res.data)
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: "Login successful",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        navigate(location.state ? location.state : '/')
+                    })
             })
             .catch(error => {
                 console.error(error)
@@ -73,7 +82,7 @@ const Login = () => {
                     icon: "error",
                     title: "Email or password invalid"
                 });
-                
+
             })
     }
 
