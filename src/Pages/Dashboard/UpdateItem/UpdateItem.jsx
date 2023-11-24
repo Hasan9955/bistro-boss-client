@@ -14,7 +14,7 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 const UpdateItem = () => {
 const {name, category, price, image, recipe, _id} = useLoaderData(); 
     const axiosPublic = useAxiosPublic();
-    const AxiosBase = useAxiosSecure();
+    const axiosSecure = useAxiosSecure();
 
 
     const { formState: { errors }, register, handleSubmit } = useForm()
@@ -38,7 +38,7 @@ const {name, category, price, image, recipe, _id} = useLoaderData();
                  console.log(menuItem)
      
      
-                 const updateRes = await AxiosBase.patch(`/menu/${_id}`, menuItem) 
+                 const updateRes = await axiosSecure.patch(`/menu/${_id}`, menuItem) 
                  console.log(updateRes.data)
                  if(updateRes.data.modifiedCount > 0){
                      Swal.fire({
@@ -60,7 +60,7 @@ const {name, category, price, image, recipe, _id} = useLoaderData();
                 image: image
             }
 
-            const updateRes = await AxiosBase.patch(`/menu/${_id}`, menuItem) 
+            const updateRes = await axiosSecure.patch(`/menu/${_id}`, menuItem) 
             console.log(updateRes.data)
             if(updateRes.data.modifiedCount > 0){
                 Swal.fire({

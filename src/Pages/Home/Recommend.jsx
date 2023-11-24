@@ -9,7 +9,7 @@ import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const Recommend = () => {
 
-  const AxiosBase = useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const Recommend = () => {
     if (user && user.email) {
             
       const cartItem = {menuId: food._id, email: user.email, category: food.category, menuName: food.name, price: food.price, image: food.image}
-      AxiosBase.post('/carts', cartItem)
+      axiosSecure.post('/carts', cartItem)
       .then(result => {
           if(result.data.insertedId){
               Swal.fire({

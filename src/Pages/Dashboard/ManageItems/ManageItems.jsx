@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 const ManageItems = () => {
 
-    const AxiosBase = useAxiosSecure();
+    const axiosSecure = useAxiosSecure();
     const [menu, , refetch] = useMenu();
 
 
@@ -24,7 +24,7 @@ const ManageItems = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                AxiosBase.delete(`/menu/${id}`)
+                axiosSecure.delete(`/menu/${id}`)
                     .then(res => {
                         console.log(res.data)
                         if (res.data.acknowledged) {

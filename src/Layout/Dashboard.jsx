@@ -64,7 +64,7 @@ const Dashboard = () => {
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to='/dashboard/payment'>
+                                    <NavLink to='/dashboard/paymentHistory'>
                                         <FaWallet className="text-2xl"></FaWallet> payment history
                                     </NavLink>
                                 </li>
@@ -99,7 +99,7 @@ const Dashboard = () => {
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to='/dashboard/payment'>
+                                    <NavLink to='/dashboard/paymentHistory'>
                                         <FaWallet className="text-2xl"></FaWallet> payment history
                                     </NavLink>
                                 </li>

@@ -2,12 +2,13 @@ import useCart from "../../../Hooks/useCart";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Swal from 'sweetalert2';
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { Link } from "react-router-dom";
 
 
 const Cart = () => {
     const [cart, refetch] = useCart();
 
-    const AxiosBase = useAxiosSecure();
+    const axiosSecure = useAxiosSecure();
     const totalPrice = cart.reduce((total, item) => total + item.price, 0)
 
     const handleDelete = id => {
@@ -21,7 +22,7 @@ const Cart = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                AxiosBase.delete(`/carts/${id}`)
+                axiosSecure.delete(`/carts/${id}`)
                     .then(res => {
                         console.log(res.data)
                         if (res.data.acknowledged) {
@@ -43,7 +44,9 @@ const Cart = () => {
             <div className="flex justify-evenly items-center">
                 <h2 className="text-2xl">Items: {cart.length}</h2>
                 <h2 className="text-2xl">Total Price: ${totalPrice}</h2>
-                <button className="btn btn-primary ">Process to checkout</button>
+                {
+                    cart.length ? <Link to='/dashboard/payment'><button  className="btn btn-primary ">Process to checkout</button></Link> : <button disabled className="btn btn-primary ">Process to checkout</button>
+                }
             </div>
             <div className="overflow-x-auto mt-10">
                 <table className="table w-full">

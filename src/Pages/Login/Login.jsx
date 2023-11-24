@@ -87,14 +87,15 @@ const Login = () => {
     }
 
     const handleCaptcha = () => {
-        const captcha_value = captchaRef.current.value
-
-        if (validateCaptcha(captcha_value)) {
-            setDisable(false)
-
-        }
-        else {
-            setDisable(true)
+        const captcha_value = captchaRef.current.value 
+        if(captcha_value.length === 6){
+            if (validateCaptcha(captcha_value)) {
+                setDisable(false)
+    
+            }
+            else {
+                setDisable(true)
+            }
         }
     }
     return (
@@ -127,8 +128,8 @@ const Login = () => {
                             </div>
                             <div className="form-control">
                                 <LoadCanvasTemplate />
-                                <input type="text" name='captcha' placeholder="captcha" ref={captchaRef} className="input input-bordered" required />
-                                <p onClick={handleCaptcha} className='text-[#4253ee] font-semiBold link text-center mt-4'>Verify Captcha</p>
+                                <input onChange={handleCaptcha} type="text" name='captcha' placeholder="captcha" ref={captchaRef} className="input input-bordered" required />
+                                {/* <p onClick={handleCaptcha} className='text-[#4253ee] font-semiBold link text-center mt-4'>Verify Captcha</p> */}
                             </div>
                             <div className="form-control mt-6">
                                 <button disabled={disable} className="btn bg-[#D1A054] text-white">Sign In</button>

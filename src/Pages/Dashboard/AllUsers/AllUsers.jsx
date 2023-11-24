@@ -10,12 +10,12 @@ import Swal from "sweetalert2";
 const AllUsers = () => {
 
 
-    const AxiosBase = useAxiosSecure();
+    const axiosSecure = useAxiosSecure();
     
     const { refetch, data: users } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
-            const res = await AxiosBase.get('/users');
+            const res = await axiosSecure.get('/users');
             return res.data;
 
         }
@@ -32,7 +32,7 @@ const AllUsers = () => {
             confirmButtonText: "Yes, make admin!"
         }).then((result) => {
             if (result.isConfirmed) {
-                AxiosBase.patch(`/users/admin/${id}`)
+                axiosSecure.patch(`/users/admin/${id}`)
                     .then(res => {
                         console.log(res.data)
                         if (res.data.acknowledged) {
@@ -61,7 +61,7 @@ const AllUsers = () => {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                AxiosBase.delete(`/users/${id}`)
+                axiosSecure.delete(`/users/${id}`)
                     .then(res => {
                         console.log(res.data)
                         if (res.data.acknowledged) {

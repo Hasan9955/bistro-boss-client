@@ -3,22 +3,29 @@ import { AuthContext } from "../../../Providers/AuthProvider";
 import { useContext } from 'react'
 import { BsCart4 } from "react-icons/bs";
 import useCart from "../../../Hooks/useCart";
+import useAdmin from "../../../Hooks/useAdmin";
 
 
 const Navbar = () => {
 
     const { user, logOut } = useContext(AuthContext)
+    const [isAdmin] = useAdmin();
     const [cart] = useCart()
 
 
     const links = <>
         <li><NavLink to='/'>Home</NavLink></li>
         <li><NavLink to='/contact'>CONTACT US</NavLink></li>
-        <li><NavLink to='/dashboard'>DASHBOARD</NavLink></li>
         <li><NavLink to='/menu'>OUR MENU</NavLink></li>
         <li><NavLink to='/order/salad'>Order Food</NavLink></li>
+        {
+            user && isAdmin && <li><NavLink to='/dashboard/adminHome'>DASHBOARD</NavLink></li> 
+        }
+        {
+            user && !isAdmin && <li><NavLink to='/dashboard/userHome'>DASHBOARD</NavLink></li>
+        }
         <li>
-            <Link to='/dashboard'>
+            <Link to='/dashboard/cart'>
                 <button className="btn btn-circle bg-green-600 relative">
                     <BsCart4 className="text-white text-2xl"></BsCart4>
                     <div className="badge badge-secondary absolute top-0 -right-8">+{cart.length}</div>
@@ -51,7 +58,7 @@ const Navbar = () => {
                 <a href="/" style={{ fontFamily: 'Cinzel' }} className="text-xl"><p className="flex flex-col justify-center items-start"><span className="md:text-2xl lg:text-3xl font-bold">BISTRO BOSS</span> <span className="md:text-xl lg:text-2xl font-bold">R e s t a u r a n t</span></p></a>
             </div>
             <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal items-center flex px-1">
+                <ul className="menu menu-horizontal font-bold   items-center flex px-1">
                     {links}
                 </ul>
             </div>
